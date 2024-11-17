@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "verify-oidc-identity"
-version = "0.1.0"
+version = "0.0.2"
 description = "Verify OIDC JWT identity tokens using OIDC discovery"
-authors = [
-  "Rich Wareham <rich.verify-oidc-identity@richwareham.com>"
-]
+authors = [ "Rich Wareham <rich.verify-oidc-identity@richwareham.com>" ]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "federatedidentity"}]
+
+  [[tool.poetry.packages]]
+  include = "federatedidentity"
 
   [tool.poetry.urls]
   Homepage = "https://github.com/rjw57/verify-oidc-identity"
@@ -33,7 +33,10 @@ pytest-asyncio = "^0.24.0"
 mkdocs = "^1.6.1"
 mkdocs-material = "^9.5.44"
 black = "^24.10.0"
-mkdocstrings = {extras = ["python"], version = "^0.27.0"}
+
+  [tool.poetry.group.doc.dependencies.mkdocstrings]
+  extras = [ "python" ]
+  version = "^0.27.0"
 
 [tool.pytest.ini_options]
 addopts = "--cov --cov-report term --cov-report html"
