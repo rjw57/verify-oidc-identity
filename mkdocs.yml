@@ -4,7 +4,7 @@ site_url: "https://rjw57.github.io/verify-oidc-identity"
 repo_url: "https://github.com/rjw57/verify-oidc-identity"
 repo_name: "rjw57/verify-oidc-identity"
 site_dir: "site"
-watch: [mkdocs.yml, README.md]
+watch: [mkdocs.yml, README.md, federatedidentity/]
 copyright: Copyright &copy; Rich Wareham
 edit_uri: edit/main/docs/
 
@@ -13,7 +13,10 @@ nav:
       - index.md
       - changelog.md
       - license.md
-  - reference.md
+  - API Reference:
+      - reference/index.md
+      - reference/exceptions.md
+      - reference/transport.md
 
 theme:
   name: material
@@ -65,7 +68,10 @@ plugins:
         python:
           import:
             - https://docs.python.org/3/objects.inv
+            - https://requests.readthedocs.io/en/latest/objects.inv
+            - https://jwcrypto.readthedocs.io/en/latest/objects.inv
           options:
+            show_root_heading: true
             filters: ["!^_"]
             members_order: source
             separate_signature: true
@@ -74,3 +80,4 @@ plugins:
             show_symbol_type_heading: true
             signature_crossrefs: true
             show_root_toc_entry: false
+            show_if_no_docstring: true

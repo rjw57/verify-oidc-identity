@@ -1,3 +1,7 @@
+"""
+HTTP transport based on [requests][].
+"""
+
 import asyncio
 from typing import Mapping, Optional
 
@@ -49,8 +53,12 @@ class AsyncRequestsSession(AsyncRequestBase):
         return await asyncio.to_thread(self._sync_request, *args, **kwargs)
 
 
-#: RequestsSession object which uses a default requests.Session.
 request = RequestsSession()
+"""
+A HTTP transport implementation which uses a default [requests.Session][].
+"""
 
-#: AsyncRequestsSession object which uses a default requests.Session.
 async_request = AsyncRequestsSession()
+"""
+An asynchronous HTTP transport implementation which uses a default [requests.Session][].
+"""

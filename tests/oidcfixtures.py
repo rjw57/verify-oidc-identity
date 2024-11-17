@@ -1,3 +1,4 @@
+import datetime
 import json
 from typing import Any
 
@@ -7,6 +8,8 @@ from jwcrypto.jwk import JWK
 from jwcrypto.jwt import JWT
 from responses import RequestsMock
 
+from federatedidentity._oidc import Issuer
+
 
 @pytest.fixture
 def jwt_issuer(faker: Faker, jwks_uri: str, mocked_responses: RequestsMock) -> str:
@@ -15,6 +18,11 @@ def jwt_issuer(faker: Faker, jwks_uri: str, mocked_responses: RequestsMock) -> s
     discovery_doc_url = f"{issuer_url}/.well-known/openid-configuration"
     mocked_responses.get(discovery_doc_url, body=discovery_doc, content_type="application/json")
     return issuer_url
+
+
+@pytest.fixture
+def oidc_issuer(jwt_issuer):
+    return Issuer.from_discovery(jwt_issuer)
 
 
 @pytest.fixture
@@ -36,6 +44,8 @@ def oidc_claims(
         "sub": oidc_subject,
         "aud": oidc_audience,
         "jti": faker.uuid4(),
+        "iat": (faker.past_datetime() - datetime.timedelta(seconds=30)).timestamp(),
+        "exp": (faker.future_datetime() + datetime.timedelta(hours=1)).timestamp(),
     }
 
 
