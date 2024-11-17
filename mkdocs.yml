@@ -1,0 +1,76 @@
+site_name: "verify-oidc-identity"
+site_description: "Verify OIDC JWT identity tokens using OIDC discovery"
+site_url: "https://rjw57.github.io/verify-oidc-identity"
+repo_url: "https://github.com/rjw57/verify-oidc-identity"
+repo_name: "rjw57/verify-oidc-identity"
+site_dir: "site"
+watch: [mkdocs.yml, README.md]
+copyright: Copyright &copy; Rich Wareham
+edit_uri: edit/main/docs/
+
+nav:
+  - Home:
+      - index.md
+      - changelog.md
+      - license.md
+  - reference.md
+
+theme:
+  name: material
+  features:
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    - content.tooltips
+    - navigation.footer
+    - navigation.indexes
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+markdown_extensions:
+  - pymdownx.highlight:
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.snippets:
+      base_path: [!relative $config_dir]
+      check_paths: true
+  - pymdownx.superfences
+  - toc
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          import:
+            - https://docs.python.org/3/objects.inv
+          options:
+            filters: ["!^_"]
+            members_order: source
+            separate_signature: true
+            show_signature_annotations: true
+            show_source: false
+            show_symbol_type_heading: true
+            signature_crossrefs: true
+            show_root_toc_entry: false

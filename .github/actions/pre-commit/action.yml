@@ -1,0 +1,35 @@
+name: pre-commit
+description: run pre-commit
+inputs:
+  extra-args:
+    description: options to pass to pre-commit run
+    required: false
+    default: "--all-files"
+  python-version:
+    description: Version of Python to use to install pre-commit
+    required: false
+    default: "3.13"
+  cache-key-prefix:
+    description: Prefix used to form pre-commit cache key
+    required: false
+    default: "pre-commit"
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "${{ inputs.python-version }}"
+    - name: Install pre-commit
+      run: pipx install pre-commit
+      shell: bash
+    - run: python -m pip install pre-commit
+      shell: bash
+    - run: python -m pip freeze --local
+      shell: bash
+    - uses: actions/cache@v4
+      with:
+        path: ~/.cache/pre-commit
+        key: ${{ inputs.cache-key-prefix}}|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
+    - run: pre-commit run --show-diff-on-failure --color=always ${{ inputs.extra-args }}
+      shell: bash

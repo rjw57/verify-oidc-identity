@@ -1,0 +1,15 @@
+name: prepare release
+description: modify working directory as if a release is going to be made
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        cache: npm
+        node-version: lts/*
+        cache-dependency-path: "./.github/workflows/*.yml"
+    - name: Prepare release
+      shell: bash
+      run: |
+        npx -p @release-it/bumper -p @release-it/conventional-changelog release-it \
+          --no-git.commit --no-git.push --no-git.tag --no-github

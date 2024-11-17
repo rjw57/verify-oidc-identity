@@ -1,0 +1,6 @@
+[flake8]
+max-line-length=99
+exclude = venv,.tox
+# Ignore E203, see explanation here:
+# https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#id1
+extend-ignore = E203

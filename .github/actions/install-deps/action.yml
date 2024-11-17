@@ -1,0 +1,33 @@
+name: install dependencies
+description: install poetry and package dependencies in a dedicated venv
+inputs:
+  python-version:
+    description: Version of Python to use to install poetry
+    required: false
+    default: "3.13"
+  cache-key-prefix:
+    description: Prefix used to form dependency cache key
+    required: false
+    default: "poetry"
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+    - name: Install poetry
+      uses: abatilo/actions-poetry@v3
+    - name: Setup a local virtual environment
+      shell: bash
+      run: |
+        poetry config virtualenvs.create true --local
+        poetry config virtualenvs.in-project true --local
+    - uses: actions/cache@v4
+      name: Define a cache for the virtual environment based on the dependencies lock file
+      with:
+        path: ./.venv
+        key: ${{ inputs.cache-key-prefix }}|${{ env.pythonLocation }}|${{ hashFiles('poetry.lock') }}
+    - name: Install the project dependencies
+      shell: bash
+      run: poetry install

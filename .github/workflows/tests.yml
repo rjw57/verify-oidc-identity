@@ -1,0 +1,64 @@
+name: Tests
+
+on:
+  workflow_call:
+  push:
+    branches-ignore: [main]
+
+jobs:
+  pre-commit:
+    name: pre-commit
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/pre-commit
+  commitlint:
+    name: commitlint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: wagoid/commitlint-github-action@v6
+  pytest:
+    name: pytest
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/install-deps
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run tests
+        run: poetry run pytest -v
+  build:
+    name: build distribution artifacts
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # required for release-bumper action
+      - uses: ./.github/actions/release-bumper
+      - uses: ./.github/actions/install-deps
+      - name: Build the Python package
+        run: poetry build
+      - name: Upload Python build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-dist
+          path: dist/*
+  mkdocs:
+    name: build documentation
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # required for release-bumper action
+      - uses: ./.github/actions/install-deps
+      - uses: ./.github/actions/release-bumper
+      - name: Build the documentation
+        run: poetry run mkdocs build
+      - name: Upload GitHub pages artefact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
