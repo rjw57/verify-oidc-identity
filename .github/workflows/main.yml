@@ -1,0 +1,84 @@
+name: Default branch
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  tests:
+    name: Run tests
+    uses: ./.github/workflows/tests.yml
+  release:
+    name: Publish release
+    needs: [tests]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure git
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: python-dist
+          path: dist/
+      - name: Create release
+        run: npx -p @release-it/bumper -p @release-it/conventional-changelog release-it
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  pages:
+    name: GitHub pages
+    needs: [release]
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+    environment:
+      name: github-pages
+      url: https://rjw57.github.io/verify-oidc-identity/
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+  test-pypi:
+    name: Publish to Test PyPI
+    needs: [release]
+    runs-on: ubuntu-24.04
+    permissions:
+      id-token: write
+    environment:
+      name: test-pypi
+      url: https://test.pypi.org/p/verify-oidc-identity
+    steps:
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: python-dist
+          path: dist/
+      - name: Upload
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+  pypi:
+    name: Publish to PyPI
+    needs: [test-pypi]
+    runs-on: ubuntu-24.04
+    permissions:
+      id-token: write
+    environment:
+      name: pypi
+      url: https://pypi.org/p/verify-oidc-identity
+    steps:
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: python-dist
+          path: dist/
+      - name: Upload
+        uses: pypa/gh-action-pypi-publish@release/v1

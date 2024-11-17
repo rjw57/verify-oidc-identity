@@ -1,0 +1,15 @@
+root=true
+
+[*.md]
+indent_style=space
+indent_size=4
+max_line_length=89
+
+[*.py]
+max_line_length=99
+indent_style=space
+indent_size=4
+
+[*.{toml,json,yml,yaml}]
+indent_style=space
+indent_size=2

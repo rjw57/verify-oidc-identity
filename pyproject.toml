@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "verify-oidc-identity"
+version = "0.1.0"
+description = "Verify OIDC JWT identity tokens using OIDC discovery"
+authors = [
+  "Rich Wareham <rich.verify-oidc-identity@richwareham.com>"
+]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "federatedidentity"}]
+
+  [tool.poetry.urls]
+  Homepage = "https://github.com/rjw57/verify-oidc-identity"
+  Repository = "https://github.com/rjw57/verify-oidc-identity.git"
+  Issues = "https://github.com/rjw57/verify-oidc-identity/issues"
+  Changelog = "https://github.com/rjw57/verify-oidc-identity/blob/main/CHANGELOG.md"
+  Documentation = "https://rjw57.github.io/verify-oidc-identity"
+
+  [tool.poetry.dependencies]
+  python = "^3.10"
+  jwcrypto = "^1.5.6"
+  validators = "^0.34.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+pytest-cov = "^6.0.0"
+faker = "^33.0.0"
+responses = "^0.25.3"
+pytest-responses = "^0.5.1"
+pytest-asyncio = "^0.24.0"
+
+[tool.poetry.group.doc.dependencies]
+mkdocs = "^1.6.1"
+mkdocs-material = "^9.5.44"
+black = "^24.10.0"
+mkdocstrings = {extras = ["python"], version = "^0.27.0"}
+
+[tool.pytest.ini_options]
+addopts = "--cov --cov-report term --cov-report html"
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.black]
+line-length = 99
+
+[tool.coverage.run]
+omit = [ "*/test/*", "*/tests/*" ]
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = [ "poetry-core" ]
+build-backend = "poetry.core.masonry.api"
