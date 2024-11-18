@@ -1,5 +1,5 @@
+import dataclasses
 import json
-from collections.abc import Mapping
 from typing import Any, NewType, Optional, cast
 from urllib.parse import urlparse
 
@@ -8,9 +8,7 @@ from jwcrypto.jwk import JWKSet
 from jwcrypto.jwt import JWT
 from validators.url import url as validate_url
 
-from .baseprovider import AsyncBaseProvider, BaseProvider
 from .exceptions import (
-    InvalidClaimsError,
     InvalidIssuerError,
     InvalidJWKSUrlError,
     InvalidOIDCDiscoveryDocumentError,
@@ -20,9 +18,69 @@ from .exceptions import (
 from .transport import AsyncRequestBase, RequestBase
 from .transport import requests as requests_transport
 
+__all__ = [
+    "Issuer",
+]
+
 ValidatedIssuer = NewType("ValidatedIssuer", str)
 ValidatedJWKSUrl = NewType("ValidatedJWKSUrl", str)
 UnvalidatedClaims = NewType("UnvalidatedClaims", dict[str, Any])
+
+
+@dataclasses.dataclass(frozen=True)
+class Issuer:
+    """
+    Represents an issuer of OIDC id tokens.
+    """
+
+    name: str
+    "Name of the issuer as it appears in `iss` claims."
+    key_set: JWKSet
+    "JWK key set associated with the issuer used to verify JWT signatures."
+
+    @classmethod
+    def from_discovery(cls, name: str, request: Optional[RequestBase] = None) -> "Issuer":
+        """
+        Initialise an issuer fetching key sets as per [OpenID Connect Discovery](oidc-discovery).
+
+        [oidc-discovery]: https://openid.net/specs/openid-connect-discovery-1_0.html
+
+        Arguments:
+            name: The name of the issuer as it would appear in the "iss" claim of a token
+            request: An optional HTTP request callable. If omitted a default implementation based
+               on the [requests][] module is used.
+
+        Returns:
+            a newly-created issuer
+
+        Raises:
+            federatedidentity.exceptions.FederatedIdentityError
+        """
+        request = request if request is not None else requests_transport.request
+        return Issuer(name=name, key_set=fetch_jwks(name, request))
+
+    @classmethod
+    async def async_from_discovery(
+        cls, name: str, request: Optional[AsyncRequestBase] = None
+    ) -> "Issuer":
+        """
+        Initialise an issuer fetching key sets as per [OpenID Connect Discovery](oidc-discovery).
+
+        [oidc-discovery]: https://openid.net/specs/openid-connect-discovery-1_0.html
+
+        Arguments:
+            name: The name of the issuer as it would appear in the "iss" claim of a token
+            request: An optional asynchronous HTTP request callable. If omitted a default
+                implementation based on the [requests][] module is used.
+
+        Returns:
+            a newly-created issuer
+
+        Raises:
+            federatedidentity.exceptions.FederatedIdentityError
+        """
+        request = request if request is not None else requests_transport.async_request
+        return Issuer(name=name, key_set=await async_fetch_jwks(name, request))
 
 
 def validate_issuer(unvalidated_issuer: str) -> ValidatedIssuer:
@@ -178,112 +236,3 @@ def validate_token(unvalidated_token: str, jwk_set: JWKSet) -> JWT:
     except JWException as e:
         raise InvalidTokenError(f"Invalid token: {e}")
     return jwt
-
-
-class _BaseOIDCTokenIssuer:
-
-    issuer: str
-    audience: str
-    _key_set: Optional[JWKSet]
-
-    def __init__(self, issuer: str, audience: str):
-        self.issuer = issuer
-        self.audience = audience
-        self._key_set = None
-
-    def validate(self, credential: str) -> Mapping[str, Any]:
-        """
-        Validate a credential as being issued by this provider, having the required claims and
-        those claims having expected values.
-
-        Returns the verified claims as a mapping.
-
-        Raises:
-            FederatedIdentityError: if the token is invalid
-            ValueError: if prepare() has not been called
-        """
-        if self._key_set is None:
-            raise ValueError("prepare() must have been called prior to validation")
-
-        unvalidated_claims = unvalidated_claims_from_token(credential)
-
-        if "iss" not in unvalidated_claims:
-            raise InvalidClaimsError("'iss' claim missing from token")
-        if unvalidated_claims["iss"] != self.issuer:
-            raise InvalidClaimsError(
-                f"'iss' claims has value '{unvalidated_claims['iss']}', "
-                f"expected '{self.issuer}'."
-            )
-
-        if "aud" not in unvalidated_claims:
-            raise InvalidClaimsError("'aud' claim is missing from token")
-        if unvalidated_claims["aud"] != self.audience:
-            raise InvalidClaimsError(
-                f"'aud' claims has value '{unvalidated_claims['aud']}', "
-                f"expected '{self.audience}'."
-            )
-
-        return json.loads(validate_token(credential, self._key_set).claims)
-
-
-class OIDCTokenIssuer(_BaseOIDCTokenIssuer, BaseProvider):
-    """
-    Represents an issuer of federated credentials in the form of OpenID Connect identity tokens.
-
-    The issuer must publish an OIDC Discovery document as per
-    https://openid.net/specs/openid-connect-discovery-1_0.html.
-
-    The id token is verified to have a signature which matches one of the keys in the issuer's
-    published key set and that it has at least an "iss", "sub", "aud" and "exp" claim. If an "exp"
-    claim is present, it is verified to be in the future. If a "nbf" claim is present it is
-    verified to be in the past and if a "iat" claim is present it is verified to be an integer.
-
-    Args:
-        issuer: issuer of tokens as represented in the "iss" claim of the OIDC token.
-        audience: expected audience of tokens as represented in the "aud" claim of the OIDC token.
-    """
-
-    def prepare(self, request: Optional[RequestBase] = None) -> None:
-        """
-        Prepare this issuer for token verification, fetching the issuer's public key if necessary.
-        The public key is only fetched once so it is safe to call this method repeatedly.
-
-        Args:
-            request: HTTP transport to use to fetch the issuer public key set. Defaults to a
-                transport based on the requests library.
-
-        Raises:
-            FederatedIdentityError: if the issuer, OIDC discovery document or JWKS is invalid or
-                some transport error ocurred.
-        """
-        if self._key_set is not None:
-            return
-        request = request if request is not None else requests_transport.request
-        self._key_set = fetch_jwks(self.issuer, request)
-
-
-class AsyncOIDCTokenIssuer(_BaseOIDCTokenIssuer, AsyncBaseProvider):
-    """
-    Asynchronous version of OIDCTokenIssuer. The only difference being that prepare() takes an
-    optional AsyncRequestBase and must be awaited.
-
-    """
-
-    async def prepare(self, request: Optional[AsyncRequestBase] = None) -> None:
-        """
-        Prepare this issuer for token verification, fetching the issuer's public key if necessary.
-        The public key is only fetched once so it is safe to call this method repeatedly.
-
-        Args:
-            request: Asynchronous HTTP transport to use to fetch the issuer public key set.
-                Defaults to a transport based on the requests library which runs in a separate
-                thread.
-
-        Raises:
-            FederatedIdentityError: if the issuer, OIDC discovery document or JWKS is invalid or
-                some transport error ocurred.
-        """
-        if self._key_set is not None:
-            return
-        request = request if request is not None else requests_transport.async_request
-        self._key_set = await async_fetch_jwks(self.issuer, request)

@@ -1,6 +1,11 @@
+"""
+Generic HTTP transport base classes and utilities.
+"""
+
 import dataclasses
 from abc import ABCMeta, abstractmethod
-from typing import Mapping, Optional
+from collections.abc import Mapping
+from typing import Optional
 
 
 @dataclasses.dataclass
@@ -36,8 +41,8 @@ class RequestBase(metaclass=ABCMeta):
             The response from the resource server.
 
         Raises:
-            TransportError: on any transport error such as DNS resolution failure. Note that error
-                status codes from the server do not raise.
+            federatedidentity.exceptions.TransportError: on any transport error such as DNS
+                resolution failure. Note that error status codes from the server do not raise.
         """
 
 
@@ -67,6 +72,6 @@ class AsyncRequestBase(metaclass=ABCMeta):
             The response from the resource server.
 
         Raises:
-            TransportError: on any transport error such as DNS resolution failure. Note that error
-                status codes from the server do not raise.
+            federatedidentity.exceptions.TransportError: on any transport error such as DNS
+                resolution failure. Note that error status codes from the server do not raise.
         """
