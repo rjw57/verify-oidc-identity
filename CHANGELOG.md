@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.0](https://github.com/rjw57/verify-oidc-identity/compare/0.2.0...0.3.0) (2024-11-18)
+
+### Features
+
+* add canned verifier functions ([1959468](https://github.com/rjw57/verify-oidc-identity/commit/195946816cc74e9fd59bc2103536adca4c868866))
+
 ## [0.2.0](https://github.com/rjw57/verify-oidc-identity/compare/0.1.0...0.2.0) (2024-11-18)
 
 ### Features
