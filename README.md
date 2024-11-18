@@ -62,7 +62,7 @@ EXPECTED_PROJECT_PATH = "my-group/my-project"
 # Expected audience claim for id token.
 EXPECTED_AUDIENCE_CLAIM = "https://my-service.example.com"
 
-def verify_gitlab_token(token: str) -> dict[str, Any]
+def verify_gitlab_token(token: str) -> dict[str, Any]:
     """
     Verify an OIDC token from GitLab and return the dictionary of claims. Raises
     federatedidentity.FederatedIdentityError if the token failed verification.
