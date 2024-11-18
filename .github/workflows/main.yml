@@ -65,6 +65,7 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
+          verbose: true
   pypi:
     name: Publish to PyPI
     needs: [test-pypi]
@@ -82,3 +83,5 @@ jobs:
           path: dist/
       - name: Upload
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          verbose: true
