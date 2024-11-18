@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0](https://github.com/rjw57/verify-oidc-identity/compare/0.1.0...0.2.0) (2024-11-18)
+
+### Features
+
+* add verbose option when uploading to PyPI for debugging ([325bb17](https://github.com/rjw57/verify-oidc-identity/commit/325bb1718ce20c8fdaa9715392e682d41188242d))
+
 ## [0.1.0](https://github.com/rjw57/verify-oidc-identity/compare/0.0.2...0.1.0) (2024-11-18)
 
 ### Features
