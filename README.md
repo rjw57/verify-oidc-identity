@@ -11,7 +11,7 @@ PyPI](https://docs.pypi.org/trusted-publishers/) allows use of OIDC tokens creat
 GitHub or GitLab CI jobs to be used to authenticate when uploading new Python packages.
 Similarly, OIDC tokens can be used to authenticate to [Google
 Cloud](https://cloud.google.com/iam/docs/workload-identity-federation),
-[AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_access-management.html#intro-access-roles
+[AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_access-management.html#intro-access-roles)
 and
 [Azure](https://learn.microsoft.com/en-us/graph/api/resources/federatedidentitycredentials-overview?view=graph-rest-1.0)
 from any OIDC identity provider.
