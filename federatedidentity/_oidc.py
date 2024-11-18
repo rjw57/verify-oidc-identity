@@ -18,10 +18,6 @@ from .exceptions import (
 from .transport import AsyncRequestBase, RequestBase
 from .transport import requests as requests_transport
 
-__all__ = [
-    "Issuer",
-]
-
 ValidatedIssuer = NewType("ValidatedIssuer", str)
 ValidatedJWKSUrl = NewType("ValidatedJWKSUrl", str)
 UnvalidatedClaims = NewType("UnvalidatedClaims", dict[str, Any])
@@ -41,20 +37,21 @@ class Issuer:
     @classmethod
     def from_discovery(cls, name: str, request: Optional[RequestBase] = None) -> "Issuer":
         """
-        Initialise an issuer fetching key sets as per [OpenID Connect Discovery](oidc-discovery).
+        Initialise an issuer fetching key sets as per [OpenID Connect Discovery][oidc-discovery].
 
         [oidc-discovery]: https://openid.net/specs/openid-connect-discovery-1_0.html
 
         Arguments:
             name: The name of the issuer as it would appear in the "iss" claim of a token
             request: An optional HTTP request callable. If omitted a default implementation based
-               on the [requests][] module is used.
+                on the [requests][] module is used.
 
         Returns:
             a newly-created issuer
 
         Raises:
-            federatedidentity.exceptions.FederatedIdentityError
+            federatedidentity.exceptions.FederatedIdentityError: The issuer's keys could not be
+                discovered.
         """
         request = request if request is not None else requests_transport.request
         return Issuer(name=name, key_set=fetch_jwks(name, request))
@@ -64,7 +61,7 @@ class Issuer:
         cls, name: str, request: Optional[AsyncRequestBase] = None
     ) -> "Issuer":
         """
-        Initialise an issuer fetching key sets as per [OpenID Connect Discovery](oidc-discovery).
+        Initialise an issuer fetching key sets as per [OpenID Connect Discovery][oidc-discovery].
 
         [oidc-discovery]: https://openid.net/specs/openid-connect-discovery-1_0.html
 
@@ -77,7 +74,8 @@ class Issuer:
             a newly-created issuer
 
         Raises:
-            federatedidentity.exceptions.FederatedIdentityError
+            federatedidentity.exceptions.FederatedIdentityError: The issuer's keys could not be
+                discovered.
         """
         request = request if request is not None else requests_transport.async_request
         return Issuer(name=name, key_set=await async_fetch_jwks(name, request))

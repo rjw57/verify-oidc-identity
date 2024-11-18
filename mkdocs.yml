@@ -16,6 +16,7 @@ nav:
   - API Reference:
       - reference/index.md
       - reference/exceptions.md
+      - reference/verifiers.md
       - reference/transport.md
 
 theme:
