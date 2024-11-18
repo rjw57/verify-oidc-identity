@@ -47,8 +47,6 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
   test-pypi:
-    # By default we don't push to test PyPI. Remove this rule for debugging
-    if: "${{ false }}"
     name: Publish to Test PyPI
     needs: [release]
     runs-on: ubuntu-24.04
@@ -70,7 +68,7 @@ jobs:
           verbose: true
   pypi:
     name: Publish to PyPI
-    needs: [release]
+    needs: [test-pypi]
     runs-on: ubuntu-24.04
     permissions:
       id-token: write
