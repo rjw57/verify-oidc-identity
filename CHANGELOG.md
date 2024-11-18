@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.4](https://github.com/rjw57/verify-oidc-identity/compare/0.3.3...0.3.4) (2024-11-18)
+
+### Reverts
+
+* Revert "ci: skip upload to test PyPI" ([7c9964e](https://github.com/rjw57/verify-oidc-identity/commit/7c9964e888683a747d4e4797e45df7ffbda4cec2))
+
 ## [0.3.3](https://github.com/rjw57/verify-oidc-identity/compare/0.3.2...0.3.3) (2024-11-18)
 
 ## [0.3.2](https://github.com/rjw57/verify-oidc-identity/compare/0.3.1...0.3.2) (2024-11-18)
