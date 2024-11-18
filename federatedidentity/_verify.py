@@ -5,12 +5,6 @@ from typing import Any, Optional, Union
 from . import _oidc
 from .exceptions import InvalidClaimsError
 
-__all__ = [
-    "ClaimVerifier",
-    "verify_id_token",
-]
-
-
 ClaimVerifier = Union[dict[str, Any], Callable[[dict[str, Any]], None]]
 """
 Type representing a claim verifier. A claim verifier may be a dictionary of acceptable claim values
@@ -78,17 +72,22 @@ def verify_id_token(
     # an appropriate value.
     verified_claims = json.loads(_oidc.validate_token(token, issuer.key_set).claims)
 
+    # Verify claims against any ClaimVerifier-s passed.
+    _verify_claims(verified_claims, required_claims)
+
+    return verified_claims
+
+
+def _verify_claims(claims: dict[str, Any], required_claims: Optional[Iterable[ClaimVerifier]]):
     required_claims = required_claims if required_claims is not None else []
     for claims_verifier in required_claims:
         if callable(claims_verifier):
-            claims_verifier(verified_claims)
+            claims_verifier(claims)
         else:
             for claim, value in claims_verifier.items():
-                if claim not in verified_claims:
+                if claim not in claims:
                     raise InvalidClaimsError(f"Required claim '{claim}' not present in token")
-                if verified_claims[claim] != value:
+                if claims[claim] != value:
                     raise InvalidClaimsError(
                         f"Required claim '{claim}' has invalid value {value!r}"
                     )
-
-    return verified_claims
