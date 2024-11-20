@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.5](https://github.com/rjw57/verify-oidc-identity/compare/0.3.4...0.3.5) (2024-11-20)
+
+### Bug Fixes
+
+* when claims have incorrect values, correctly report the invalid value ([757abce](https://github.com/rjw57/verify-oidc-identity/commit/757abce3a4ebf11af14ba988a5597b799a346c8c))
+
 ## [0.3.4](https://github.com/rjw57/verify-oidc-identity/compare/0.3.3...0.3.4) (2024-11-18)
 
 ### Reverts

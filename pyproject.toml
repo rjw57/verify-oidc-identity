@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "verify-oidc-identity"
-version = "0.3.4"
+version = "0.3.5"
 description = "Verify OIDC JWT identity tokens using OIDC discovery"
 authors = [ "Rich Wareham <rich.verify-oidc-identity@richwareham.com>" ]
 license = "MIT"
