@@ -89,5 +89,6 @@ def _verify_claims(claims: dict[str, Any], required_claims: Optional[Iterable[Cl
                     raise InvalidClaimsError(f"Required claim '{claim}' not present in token")
                 if claims[claim] != value:
                     raise InvalidClaimsError(
-                        f"Required claim '{claim}' has invalid value {value!r}"
+                        f"Required claim '{claim}' has invalid value {claims[claim]!r}. "
+                        f"Expected {value!r}."
                     )
