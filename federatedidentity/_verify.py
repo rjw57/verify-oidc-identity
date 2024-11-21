@@ -55,7 +55,7 @@ def verify_id_token(
     # Check that the token "aud" claim matches at least one of our expected audiences.
     if not any(unvalidated_claims["aud"] == audience for audience in valid_audiences):
         raise InvalidClaimsError(
-            f"Token issuer '{unvalidated_claims['aud']}' did not match any valid issuer"
+            f"Token audience '{unvalidated_claims['aud']}' did not match any valid audience"
         )
 
     # Determine which issuer matches the token.
