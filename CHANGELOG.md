@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.7](https://github.com/rjw57/verify-oidc-identity/compare/0.3.6...0.3.7) (2024-11-21)
+
+### Bug Fixes
+
+* correct description of InvalidClaimsError for invalid audience ([5b7035e](https://github.com/rjw57/verify-oidc-identity/commit/5b7035eb7a3e361f80a8cb3d292372da6d81e63b))
+
 ## [0.3.6](https://github.com/rjw57/verify-oidc-identity/compare/0.3.5...0.3.6) (2024-11-20)
 
 ## [0.3.5](https://github.com/rjw57/verify-oidc-identity/compare/0.3.4...0.3.5) (2024-11-20)
