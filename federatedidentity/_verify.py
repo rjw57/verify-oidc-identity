@@ -1,6 +1,6 @@
 import json
 from collections.abc import Callable, Iterable
-from typing import Any, Optional, Union
+from typing import Any, NewType, Optional, Union, cast
 
 from . import _oidc
 from .exceptions import InvalidClaimsError
@@ -13,11 +13,19 @@ or a callable which takes the claims dictionary. A claims verifier callable shou
 the expected values.
 """
 
+AnyAudienceType = NewType("AnyAudienceType", object)
+
+ANY_AUDIENCE = cast(AnyAudienceType, object())
+"""
+Special value which can be passed as the `valid_audiences` parameter to
+[verify_id_token][federatedidentity.verify_id_token] which matches any audience.
+"""
+
 
 def verify_id_token(
     token: Union[str, bytes],
     valid_issuers: Iterable[_oidc.Issuer],
-    valid_audiences: Iterable[str],
+    valid_audiences: Iterable[Union[str, AnyAudienceType]],
     *,
     required_claims: Optional[Iterable[ClaimVerifier]] = None,
 ) -> dict[str, Any]:
@@ -33,7 +41,8 @@ def verify_id_token(
         valid_issuers: Iterable of valid issuers. At least one Issuer must match the token issuer
             for verification to succeed.
         valid_audiences: Iterable of valid audiences. At least one audience must match the `aud`
-            claim for verification to succeed.
+            claim for verification to succeed. An audience is either a literal string or a callable
+            which takes an audience and returns True if it is valid.
         required_claims: Iterable of required claim verifiers. Claims are passed to verifiers after
             the token's signature has been verified. Claims required by OIDC are always
             validated. All claim verifiers must pass for verification to succeed.
@@ -53,7 +62,10 @@ def verify_id_token(
             raise InvalidClaimsError(f"'{claim}' claim not present in token")
 
     # Check that the token "aud" claim matches at least one of our expected audiences.
-    if not any(unvalidated_claims["aud"] == audience for audience in valid_audiences):
+    if not any(
+        (audience == unvalidated_claims["aud"]) or (audience is ANY_AUDIENCE)
+        for audience in valid_audiences
+    ):
         raise InvalidClaimsError(
             f"Token audience '{unvalidated_claims['aud']}' did not match any valid audience"
         )

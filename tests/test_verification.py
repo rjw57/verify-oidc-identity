@@ -8,7 +8,7 @@ from jwcrypto.jwk import JWK
 from jwcrypto.jws import JWS
 from jwcrypto.jwt import JWT
 
-from federatedidentity import Issuer
+from federatedidentity import ANY_AUDIENCE, Issuer
 from federatedidentity import exceptions as exc
 from federatedidentity import verify_id_token
 
@@ -166,3 +166,8 @@ def test_nbf_claim_in_future(
     token = make_jwt(oidc_claims, jwks[alg], alg)
     with pytest.raises(exc.InvalidTokenError, match="Valid from"):
         verify_id_token(token, [oidc_issuer], [oidc_audience])
+
+
+def test_any_audience(faker: Faker, oidc_token: str, oidc_issuer: Issuer):
+    "The special ANY_AUDIENCE value matches any audience claim"
+    verify_id_token(oidc_token, [oidc_issuer], [ANY_AUDIENCE])
