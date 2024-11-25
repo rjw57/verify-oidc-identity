@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.0](https://github.com/rjw57/verify-oidc-identity/compare/0.3.8...0.4.0) (2024-11-25)
+
+### Features
+
+* add special ANY_AUDIENCE value for matching any audience ([76fc317](https://github.com/rjw57/verify-oidc-identity/commit/76fc3177cfc12cbcc9002f14465277bb2a334311))
+
 ## [0.3.8](https://github.com/rjw57/verify-oidc-identity/compare/0.3.7...0.3.8) (2024-11-25)
 
 ## [0.3.7](https://github.com/rjw57/verify-oidc-identity/compare/0.3.6...0.3.7) (2024-11-21)
