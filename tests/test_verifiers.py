@@ -50,9 +50,7 @@ def test_only_for_issuers_non_matching(
     )
 
 
-def test_only_for_issuers_matching_fail(
-    faker: Faker, oidc_token: str, oidc_audience: str, oidc_issuer: Issuer
-):
+def test_only_for_issuers_matching_fail(oidc_token: str, oidc_audience: str, oidc_issuer: Issuer):
     with pytest.raises(InvalidClaimsError):
         verify_id_token(
             oidc_token,
@@ -68,7 +66,7 @@ def test_only_for_issuers_matching_fail(
 
 
 def test_only_for_issuers_matching_succeed(
-    faker: Faker, oidc_token: str, oidc_audience: str, oidc_issuer: Issuer
+    oidc_token: str, oidc_audience: str, oidc_issuer: Issuer
 ):
     verify_id_token(
         oidc_token,
