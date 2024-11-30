@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.2](https://github.com/rjw57/verify-oidc-identity/compare/0.4.1...0.4.2) (2024-11-30)
+
+### Bug Fixes
+
+* remove unused fixtures from tests ([236c7f9](https://github.com/rjw57/verify-oidc-identity/commit/236c7f9459f47e888972e3e14a0d97552016e096))
+
 ## [0.4.1](https://github.com/rjw57/verify-oidc-identity/compare/0.4.0...0.4.1) (2024-11-28)
 
 ## [0.4.0](https://github.com/rjw57/verify-oidc-identity/compare/0.3.8...0.4.0) (2024-11-25)
