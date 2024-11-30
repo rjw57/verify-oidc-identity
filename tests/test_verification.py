@@ -15,17 +15,15 @@ from federatedidentity import verify_id_token
 from .oidcfixtures import make_jwt
 
 
-def test_basic_verification(
-    faker: Faker, oidc_token: str, oidc_audience: str, oidc_issuer: Issuer
-):
+def test_basic_verification(oidc_token: str, oidc_audience: str, oidc_issuer: Issuer):
     verify_id_token(oidc_token, [oidc_issuer], [oidc_audience])
 
 
-def test_auto_decode(faker: Faker, oidc_token: str, oidc_audience: str, oidc_issuer: Issuer):
+def test_auto_decode(oidc_token: str, oidc_audience: str, oidc_issuer: Issuer):
     verify_id_token(oidc_token.encode("ascii"), [oidc_issuer], [oidc_audience])
 
 
-def test_non_ascii_token(faker: Faker, oidc_token: str, oidc_audience: str, oidc_issuer: Issuer):
+def test_non_ascii_token(oidc_token: str, oidc_audience: str, oidc_issuer: Issuer):
     with pytest.raises(UnicodeDecodeError):
         verify_id_token(
             "\N{LATIN SMALL LETTER E}\N{COMBINING CIRCUMFLEX ACCENT}".encode("utf8"),
@@ -40,9 +38,7 @@ def test_good_subject(oidc_token: str, oidc_audience: str, oidc_issuer: Issuer, 
     )
 
 
-def test_bad_subject(
-    faker: Faker, oidc_token: str, oidc_audience: str, oidc_issuer: Issuer, oidc_subject: str
-):
+def test_bad_subject(faker: Faker, oidc_token: str, oidc_audience: str, oidc_issuer: Issuer):
     with pytest.raises(exc.InvalidClaimsError):
         verify_id_token(
             oidc_token, [oidc_issuer], [oidc_audience], required_claims=[{"sub": faker.slug()}]
@@ -50,7 +46,7 @@ def test_bad_subject(
 
 
 def test_claim_verifier_missing_claim(
-    faker: Faker, oidc_token: str, oidc_audience: str, oidc_issuer: Issuer, oidc_subject: str
+    faker: Faker, oidc_token: str, oidc_audience: str, oidc_issuer: Issuer
 ):
     with pytest.raises(exc.InvalidClaimsError):
         verify_id_token(
@@ -118,7 +114,7 @@ def test_mismatched_audience(faker: Faker, oidc_token: str, oidc_issuer: Issuer)
 
 
 @pytest.mark.parametrize("issuer", ["not-a-url", "http://example.com/", "ftp://example.com/"])
-def test_malformed_issuer(issuer, oidc_token: str, oidc_audience: str):
+def test_malformed_issuer(issuer):
     with pytest.raises(exc.InvalidIssuerError):
         Issuer.from_discovery(issuer)
 
@@ -141,7 +137,6 @@ def test_mismatched_issuer(
 @pytest.mark.parametrize("alg", ["RS256", "ES256"])
 def test_exp_claim_in_past(
     alg: str,
-    faker: Faker,
     oidc_claims: dict[str, Any],
     oidc_audience: str,
     oidc_issuer: Issuer,
@@ -156,7 +151,6 @@ def test_exp_claim_in_past(
 @pytest.mark.parametrize("alg", ["RS256", "ES256"])
 def test_nbf_claim_in_future(
     alg: str,
-    faker: Faker,
     oidc_claims: dict[str, Any],
     oidc_audience: str,
     oidc_issuer: Issuer,
@@ -168,6 +162,6 @@ def test_nbf_claim_in_future(
         verify_id_token(token, [oidc_issuer], [oidc_audience])
 
 
-def test_any_audience(faker: Faker, oidc_token: str, oidc_issuer: Issuer):
+def test_any_audience(oidc_token: str, oidc_issuer: Issuer):
     "The special ANY_AUDIENCE value matches any audience claim"
     verify_id_token(oidc_token, [oidc_issuer], [ANY_AUDIENCE])
