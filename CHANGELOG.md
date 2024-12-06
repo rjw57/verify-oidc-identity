@@ -1,5 +1,7 @@
 # Changelog
 
+## [0.4.5](https://github.com/rjw57/verify-oidc-identity/compare/0.4.4...0.4.5) (2024-12-06)
+
 ## [0.4.4](https://github.com/rjw57/verify-oidc-identity/compare/0.4.3...0.4.4) (2024-12-01)
 
 ## [0.4.3](https://github.com/rjw57/verify-oidc-identity/compare/0.4.2...0.4.3) (2024-12-01)
