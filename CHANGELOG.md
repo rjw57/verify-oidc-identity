@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.7](https://github.com/rjw57/verify-oidc-identity/compare/0.4.6...0.4.7) (2024-12-09)
+
+### Bug Fixes
+
+* update import of FederatedIdentityError in example ([179e32c](https://github.com/rjw57/verify-oidc-identity/commit/179e32c5e6fd25b891380e96d367630cd9a3c641))
+
 ## [0.4.6](https://github.com/rjw57/verify-oidc-identity/compare/0.4.5...0.4.6) (2024-12-08)
 
 ## [0.4.5](https://github.com/rjw57/verify-oidc-identity/compare/0.4.4...0.4.5) (2024-12-06)
