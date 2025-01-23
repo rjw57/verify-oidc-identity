@@ -24,7 +24,7 @@ readme = "README.md"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 pytest-cov = "^6.0.0"
-faker = "^34.0.0"
+faker = "^35.0.0"
 responses = "^0.25.3"
 pytest-responses = "^0.5.1"
 pytest-asyncio = "^0.25.0"
