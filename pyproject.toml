@@ -36,7 +36,7 @@ black = "^25.0.0"
 
   [tool.poetry.group.doc.dependencies.mkdocstrings]
   extras = [ "python" ]
-  version = "^0.27.0"
+  version = "^0.28.0"
 
 [tool.pytest.ini_options]
 addopts = "--cov --cov-report term --cov-report html"
