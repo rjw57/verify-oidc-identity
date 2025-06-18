@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.31](https://github.com/rjw57/verify-oidc-identity/compare/0.4.30...0.4.31) (2025-06-18)
+
+### Bug Fixes
+
+* **deps:** update all dependencies ([5643c6c](https://github.com/rjw57/verify-oidc-identity/commit/5643c6cef790b3df4e6c15ad920f245b43a0bd48))
+
 ## [0.4.30](https://github.com/rjw57/verify-oidc-identity/compare/0.4.29...0.4.30) (2025-03-31)
 
 ## [0.4.29](https://github.com/rjw57/verify-oidc-identity/compare/0.4.28...0.4.29) (2025-03-19)
