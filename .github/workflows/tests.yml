@@ -59,6 +59,6 @@ jobs:
       - name: Build the documentation
         run: poetry run mkdocs build
       - name: Upload GitHub pages artefact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: site/
