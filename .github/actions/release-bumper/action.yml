@@ -3,7 +3,7 @@ description: modify working directory as if a release is going to be made
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         cache: npm
         node-version: lts/*

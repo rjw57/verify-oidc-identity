@@ -23,17 +23,17 @@ repos:
       - id: debug-statements
 
   - repo: https://github.com/python-poetry/poetry
-    rev: 2.1.4
+    rev: 2.2.1
     hooks:
       - id: poetry-check
 
   - repo: https://github.com/psf/black
-    rev: 25.1.0
+    rev: 25.9.0
     hooks:
       - id: black
 
   - repo: https://github.com/timothycrosley/isort
-    rev: 6.0.1
+    rev: 7.0.0
     hooks:
       - id: isort
 
@@ -43,7 +43,7 @@ repos:
       - id: flake8
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.17.1
+    rev: v1.18.2
     hooks:
       - id: mypy
         additional_dependencies: ["types-requests"]
