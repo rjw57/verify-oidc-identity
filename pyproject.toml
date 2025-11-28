@@ -22,9 +22,9 @@ readme = "README.md"
   validators = "^0.35.0"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.3.3"
+pytest = "^9.0.0"
 pytest-cov = "^7.0.0"
-faker = "^37.0.0"
+faker = "^38.0.0"
 responses = "^0.25.3"
 pytest-responses = "^0.5.1"
 pytest-asyncio = "^1.0.0"
@@ -36,7 +36,7 @@ black = "^25.0.0"
 
   [tool.poetry.group.doc.dependencies.mkdocstrings]
   extras = [ "python" ]
-  version = "^0.30.0"
+  version = "^1.0.0"
 
 [tool.pytest.ini_options]
 addopts = "--cov --cov-report term --cov-report html"
