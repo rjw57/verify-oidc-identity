@@ -43,7 +43,7 @@ jobs:
       - name: Build the Python package
         run: poetry build
       - name: Upload Python build artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: python-dist
           path: dist/*
