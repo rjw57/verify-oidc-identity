@@ -25,7 +25,7 @@ readme = "README.md"
 pytest = "^9.0.0"
 pytest-cov = "^7.0.0"
 faker = "^40.0.0"
-responses = "^0.25.3"
+responses = "^0.26.0"
 pytest-responses = "^0.5.1"
 pytest-asyncio = "^1.0.0"
 
