@@ -4,6 +4,9 @@
     "config:recommended",
     "group:all"
   ],
+  "schedule": [
+    "* * * * 6"
+  ],
   "pre-commit": {
     "enabled": true
   }
